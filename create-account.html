@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="create-account.css ">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <form action="create-account.php" method="POST">
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first_name" required> <!-- Fixed name attribute -->
+        
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" name="last_name" required> <!-- Fixed name attribute -->
+        
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+        
+            <label for="mobile">Mobile No:</label>
+            <input type="text" id="mobile" name="mobile_no" required> <!-- Fixed name attribute -->
+        
+            <label for="sex">Sex:</label>
+            <select id="sex" name="sex" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+        
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        
+            <!-- Address Information -->
+            <label for="region">Region</label>
+            <select id="region" name="region" required>
+                <option value="">Select Region</option>
+            </select>
+
+            <label for="province">Province</label>
+            <select id="province" name="province" required>
+                <option value="">Select Province</option>
+            </select>
+
+            <label for="city_municipality">City/Municipality</label>
+            <select id="city_municipality" name="city_municipality" required>
+                <option value="">Select City/Municipality</option>
+            </select>
+
+            <label for="barangay">Barangay</label>
+            <select id="barangay" name="barangay" required>
+                <option value="">Select Barangay</option>
+            </select>
+        
+            <label for="telephone">Telephone No:</label>
+            <input type="text" id="telephone" name="telephone_no" required> <!-- Fixed name attribute -->
+        
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        
+            <input type="submit" value="Create Account">
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let data; // Declare a variable to hold the fetched data
+
+            // Fetch and populate regions
+            $.getJSON('https://raw.githubusercontent.com/flores-jacob/philippine-regions-provinces-cities-municipalities-barangays/master/philippine_provinces_cities_municipalities_and_barangays_2017v3.1.json', function(response) {
+                data = response; // Store the fetched data for later use
+                for (const key in data) {
+                    $('#region').append('<option value="' + key + '">' + data[key].region_name + '</option>');
+                }
+            }).fail(function() {
+                console.error("Failed to load regions.");
+            });
+
+            // Fetch and populate provinces based on selected region
+            $('#region').change(function() {
+                var selectedRegionKey = $(this).val();
+                $('#province').empty().append('<option value="">Select Province</option>');
+                $('#city_municipality').empty().append('<option value="">Select City/Municipality</option>');
+                $('#barangay').empty().append('<option value="">Select Barangay</option>');
+
+                const provinces = data[selectedRegionKey].province_list;
+                for (const provinceName in provinces) {
+                    $('#province').append('<option value="' + provinceName + '">' + provinceName + '</option>');
+                }
+            });
+
+            // Fetch and populate municipalities based on selected province
+            $('#province').change(function() {
+                var selectedProvinceName = $(this).val();
+                $('#city_municipality').empty().append('<option value="">Select City/Municipality</option>');
+                $('#barangay').empty().append('<option value="">Select Barangay</option>');
+
+                const municipalities = data[$('#region').val()].province_list[selectedProvinceName].municipality_list;
+                for (const municipalityName in municipalities) {
+                    $('#city_municipality').append('<option value="' + municipalityName + '">' + municipalityName + '</option>');
+                }
+            });
+
+            // Fetch and populate barangays based on selected municipality
+            $('#city_municipality').change(function() {
+                var selectedMunicipalityName = $(this).val();
+                $('#barangay').empty().append('<option value="">Select Barangay</option>');
+
+                const barangays = data[$('#region').val()].province_list[$('#province').val()].municipality_list[selectedMunicipalityName].barangay_list;
+                barangays.forEach(function(barangay) {
+                    $('#barangay').append('<option value="' + barangay + '">' + barangay + '</option>');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
