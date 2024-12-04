@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #536adc;
+    --primary-color: #91b5ef;
     --text-color: #1d1d1d;
     --bg-color: #f1f1fb;
   }
@@ -15,8 +15,8 @@
 
   .top-bar {
     width: 100%;
-    background-color: #536adc;
-    padding: 15px 20px;
+    background-color: #4d99cc;
+    padding-top: 15px;
     color: #fff;
     text-align: center;
     font-size: 20px;
@@ -24,7 +24,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+
   }
 
   .container {
@@ -74,7 +74,7 @@
     transition: all 0.3s;
   }
   .calendar .header .btns .btn:hover {
-    background-color: #536adc;
+    background-color: #91b5ef;
     transform: scale(1.05);
   }
   .weekdays {
@@ -144,12 +144,8 @@
     margin: 20px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: transform 0.3s ease;
   }
   
-  .schedule-container:hover {
-    transform: scale(1.02);
-  }
   
   /* Header Section */
   .schedule-container h2 {
@@ -184,20 +180,21 @@
   }
   
   .time-section div:hover {
-    background-color: #435bcf;
+    background-color: #4f9db1;
     transform: scale(1.05);
   }
   
   /* Inactive Time Slot */
   .time-section div.inactive {
     background-color: #dcdcdc;
-    color: #888;
+    color: #555555;
     cursor: not-allowed;
   }
   
   /* Footer Section */
   .footer {
-    margin-top: 20px;
+    margin-top: 100px;
+    gap: 20px;
   }
   
   .footer button {
@@ -212,7 +209,7 @@
   }
   
   .footer button:hover {
-    background-color: #435bcf;
+    background-color: #4f9db1;
     transform: scale(1.1);
   }
   
@@ -269,7 +266,7 @@
   }
   
   .footer button {
-    background-color: #3a85ff;
+    background-color: var(--primary-color);
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -279,10 +276,10 @@
   }
   
   .day.selected {
-    background-color: #536adc;
+    background-color: var(--primary-color);
     color: #fff;
     font-weight: bold;
-    border: 2px solid #3a85ff;
+    border: 2px solid #4f9db1;
     border-radius: 5px;
   }
 
@@ -294,7 +291,7 @@
   }
   
   .time-section div {
-    background-color: #3a85ff; /* Active slot color */
+    background-color: #91b5ef; /* Active slot color */
     color: white;
     cursor: pointer;
     padding: 10px;
@@ -305,11 +302,11 @@
   
   .time-section div.inactive {
     background-color: #dcdcdc; /* Inactive slot color */
-    color: #888;
+    color: #555555;
     cursor: not-allowed;
   }
   
   .time-section div:hover {
-    background-color: #435bcf;
+    background-color: #91b5ef;
     transform: scale(1.05);
   }
