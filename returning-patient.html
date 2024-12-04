@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Patient Appointment</title>
+  <link rel="stylesheet" href="style.css">
+  <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+</head>
+<body>
+
+    <div class="top-bar">
+        <h1>Returning Patient</h1>
+      </div>
+  
+    <div class="main-container">
+    <h1>Set a date for your appointment.</h1>
+    <div class="content">
+      <!-- Calendar Section -->
+      <div class="calendar-container">
+        <div class="calendar">
+          <div class="header">
+            <div class="month">December 2024</div>
+            <div class="btns">
+              <div class="btn today-btn">
+                <i class="fas fa-calendar-day"></i>
+              </div>
+              <div class="btn prev-btn">
+                <i class="fas fa-chevron-left"></i>
+              </div>
+              <div class="btn next-btn">
+                <i class="fas fa-chevron-right"></i>
+              </div>
+            </div>
+          </div>
+          <div class="weekdays">
+            <div class="day">Sun</div>
+            <div class="day">Mon</div>
+            <div class="day">Tue</div>
+            <div class="day">Wed</div>
+            <div class="day">Thu</div>
+            <div class="day">Fri</div>
+            <div class="day">Sat</div>
+          </div>
+          <div class="days">
+            <!-- JavaScript will populate the days -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Section -->
+      <div class="schedule-container">
+        <h2>Wednesday, September 18th 2024</h2>
+        <p>All times shown are CDT</p>
+        <div class="time-section">
+          <div>09:00 am</div>
+          <div>10:00 am</div>
+          <div>11:00 am</div>
+          <div>01:00 pm</div>
+          <div>02:00 pm</div>
+          <div>03:00 pm</div>
+        </div>
+        <div class="footer">
+            <button class="book-btn">BOOK</button>
+            <button class="cancel-btn">CANCEL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
