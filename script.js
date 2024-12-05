@@ -69,29 +69,39 @@ function renderCalendar() {
 
 // Add click listeners for days
 function addDayClickListeners() {
-    const allDays = document.querySelectorAll(".day");
-  
-    allDays.forEach((day) => {
-      day.addEventListener("click", () => {
-        if (day.classList.contains("prev") || day.classList.contains("next")) {
-          return; // Ignore clicks on previous or next month days
-        }
-  
-        // Remove the `selected` class from the previously selected element
-        if (selectedDateElement) {
-          selectedDateElement.classList.remove("selected");
-        }
-  
-        // Format the selected date as YYYY-MM-DD
-        selectedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day.textContent).padStart(2, '0')}`;
-        console.log("Selected Date (Formatted):", selectedDate);
-  
-        // Highlight the new selected date
-        day.classList.add("selected");
-        selectedDateElement = day;
-      });
+  const allDays = document.querySelectorAll(".day");
+
+  allDays.forEach((day) => {
+    day.addEventListener("click", () => {
+      if (day.classList.contains("prev") || day.classList.contains("next")) {
+        return; // Ignore clicks on previous or next month days
+      }
+
+      // If the clicked day is already selected, deselect it
+      if (day.classList.contains("selected")) {
+        day.classList.remove("selected");
+        selectedDate = null; // Clear the selected date
+        selectedDateElement = null; // Clear the reference
+        console.log("Date deselected");
+        return;
+      }
+
+      // Remove the `selected` class from the previously selected element
+      if (selectedDateElement) {
+        selectedDateElement.classList.remove("selected");
+      }
+
+      // Format the selected date as YYYY-MM-DD
+      selectedDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day.textContent).padStart(2, '0')}`;
+      console.log("Selected Date (Formatted):", selectedDate);
+
+      // Highlight the new selected date
+      day.classList.add("selected");
+      selectedDateElement = day;
     });
-  }
+  });
+}
+
   
 
 // Add event listeners to time slots
@@ -100,23 +110,25 @@ function addTimeSlotListeners() {
 
   timeSlots.forEach((slot) => {
     slot.addEventListener("click", () => {
-      // Skip if the time slot is already inactive
       if (slot.classList.contains("inactive")) {
-        return;
+        // Re-activate the slot
+        resetTimeSlots();
+
+        console.log("Reactivated Time Slot:", slot.textContent);
+      } else {
+        // Deactivate the slot
+        slot.classList.add("inactive");
+        slot.style.backgroundColor = "#dcdcdc";
+        slot.style.color = "#888";
+
+        // Set the selected time
+        selectedTime = slot.textContent;
+        console.log("Selected Time:", selectedTime);
       }
-
-      // Mark the slot as inactive and change its appearance
-      slot.classList.add("inactive");
-      slot.style.backgroundColor = "#dcdcdc";
-      slot.style.color = "#888";
-      slot.style.cursor = "not-allowed";
-
-      // Set the selected time
-      selectedTime = slot.textContent;
-      console.log("Selected Time:", selectedTime);
     });
   });
 }
+
 
 // Function to reset all time slots to available state
 function resetTimeSlots() {
@@ -125,7 +137,7 @@ function resetTimeSlots() {
   timeSlots.forEach((slot) => {
     if (slot.classList.contains("inactive")) {
       slot.classList.remove("inactive");
-      slot.style.backgroundColor = "#3a85ff";  // Reset to original color
+      slot.style.backgroundColor = "#91b5ef";  // Reset to original color
       slot.style.color = "white";              // Reset text color
       slot.style.cursor = "pointer";           // Make it clickable again
     }
