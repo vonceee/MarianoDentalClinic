@@ -100,9 +100,9 @@ function resetTimeSlots() {
   timeSlots.forEach((slot) => {
     if (slot.classList.contains("inactive")) {
       slot.classList.remove("inactive");
-      slot.style.backgroundColor = "var(--primary-color)";  // Reset to original color
-      slot.style.color = "#fff";                            // Reset text color
-      slot.style.pointerEvents = "auto";                    // Make it clickable again
+      slot.style.backgroundColor = "var(--primary-color)";
+      slot.style.color = "#fff";                            
+      slot.style.pointerEvents = "auto";                    
     }
 
     // Reattach the click event to time slots after reset
@@ -193,23 +193,6 @@ function fetchAppointments() {
     .catch(error => console.error("Error fetching appointments:", error));
 }
 
-// Click event listener for time slots
-function timeSlotClickListener(event) {
-  const timeSlot = event.target;
-  if (timeSlot.classList.contains("inactive")) {
-    return; // Ignore clicks on inactive time slots
-  }
-
-  if (selectedTime) {
-    alert(`You have already selected time: ${selectedTime}`);
-  } else {
-    selectedTime = timeSlot.getAttribute("data-time");
-    timeSlot.style.backgroundColor = "gray"; // Change color when selected
-    timeSlot.style.color = "black";
-    console.log(`Time slot selected: ${selectedTime}`);
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   const bookBtn = document.getElementById("book-btn");
 
@@ -222,107 +205,108 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Event listener for the Book button
   bookBtn.addEventListener("click", () => {
     if (selectedDate && selectedTime) {
-      // Send the selected date and time to the PHP script to book the appointment
       const appointmentData = {
         date: selectedDate,
         time: selectedTime
       };
-
+  
       fetch("bookAppointment.php", {
-        method: "POST", // Use POST method to send data
+        method: "POST",
         headers: {
-          "Content-Type": "application/json" // Specify JSON content type
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(appointmentData) // Send the data as JSON
+        body: JSON.stringify(appointmentData)
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Display success message if the appointment was booked
-          alert(data.message);
-          // Fetch updated appointments after booking
-          fetchAppointments();
-        } else {
-          // Display error message if the booking failed
-          alert(data.message);
-        }
-
-        // Optionally, reset the selection after booking
-        resetSelection();
-      })
-      .catch(error => {
-        console.error("Error booking appointment:", error);
-        alert("There was an error booking your appointment.");
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Show the custom confirmation dialog
+            openDialog();
+  
+            // Optionally update dialog content dynamically
+            document.querySelector("#confirmationDialog h2").textContent = "Thank you!";
+            document.querySelector(
+              "#confirmationDialog p"
+            ).textContent = `Your booking for ${selectedDate} at ${selectedTime} has been confirmed. 😊`;
+  
+            fetchAppointments();
+          } else {
+            alert(data.message);
+          }
+  
+          resetSelection();
+        })
+        .catch(error => {
+          console.error("Error booking appointment:", error);
+          alert("There was an error booking your appointment.");
+        });
     }
   });
-
-  // Reset date and time selections
+  
   function resetSelection() {
     selectedDate = null;
     selectedTime = null;
     if (selectedDateElement) {
       selectedDateElement.classList.remove("selected");
     }
-    resetTimeSlots(); // Reset time slots to available state
-    enableBookButton(); // Re-enable the button
+    resetTimeSlots();
+    enableBookButton();
   }
-
-  // Initial fetch for appointments
   fetchAppointments();
 });
 
-const cancelBtn = document.getElementById("cancel-btn"); // Select the Cancel button
+const cancelBtn = document.getElementById("cancel-btn");
 
-// Click event listener for cancel button
 cancelBtn.addEventListener("click", () => {
   if (selectedTime) {
-    // Reset the selected time slot visually
     const selectedTimeSlot = document.querySelector(`.time-section div[data-time="${selectedTime}"]`);
     if (selectedTimeSlot) {
-      selectedTimeSlot.style.backgroundColor = "var(--primary-color)"; // Reset background color
-      selectedTimeSlot.style.color = "#fff"; // Reset text color
+      selectedTimeSlot.style.backgroundColor = "var(--primary-color)";
+      selectedTimeSlot.style.color = "#fff"; 
     }
 
-    // Reset selected time
     selectedTime = null;
     console.log("Time selection canceled");
 
-    // Re-enable the Book button
     enableBookButton();
     
-    // Disable the Cancel button
     cancelBtn.disabled = true;
   }
 });
 
-// Update the time slot click event to enable/disable the cancel button
 function timeSlotClickListener(event) {
   const timeSlot = event.target;
   if (timeSlot.classList.contains("inactive")) {
-    return; // Ignore clicks on inactive time slots
+    return;
+  }
+
+  if (selectedTime === timeSlot.getAttribute("data-time")) {
+    selectedTime = null;
+    timeSlot.style.backgroundColor = "";
+    timeSlot.style.color = "";
+    console.log("Time slot unselected.");
+    return;
   }
 
   if (selectedTime) {
-    alert(`You have already selected time: ${selectedTime}`);
-  } else {
-    selectedTime = timeSlot.getAttribute("data-time");
-    timeSlot.style.backgroundColor = "gray"; // Change color when selected
-    timeSlot.style.color = "black";
-    console.log(`Time slot selected: ${selectedTime}`);
-
-    // Enable the Cancel button when a time is selected
-    cancelBtn.disabled = false;
+    const previouslySelected = document.querySelector(
+      `[data-time="${selectedTime}"]`
+    );
+    if (previouslySelected) {
+      previouslySelected.style.backgroundColor = "";
+      previouslySelected.style.color = "";
+    }
   }
 
-  // Enable or disable the Book button based on the selection
-  enableBookButton();
+  selectedTime = timeSlot.getAttribute("data-time");
+  timeSlot.style.backgroundColor = "gray";
+  timeSlot.style.color = "#fff";
+  console.log(`Time slot selected: ${selectedTime}`);
 }
 
-// Enable the book button when a date and time are selected
+
 function enableBookButton() {
   const bookBtn = document.getElementById("book-btn");
   if (selectedDate && selectedTime) {
@@ -331,3 +315,18 @@ function enableBookButton() {
     bookBtn.disabled = true;
   }
 }
+
+/* DIALOG BOX */
+
+function closeDialog() {
+  const dialog = document.getElementById("confirmationDialog");
+  dialog.style.display = "none";
+}
+
+// To open the dialog
+function openDialog() {
+  const dialog = document.getElementById("confirmationDialog");
+  dialog.style.display = "flex";
+}
+
+

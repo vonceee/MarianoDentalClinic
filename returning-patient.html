@@ -58,7 +58,7 @@
 
       <!-- Schedule Section -->
       <div class="schedule-container">
-        <h2>Wednesday, September 18th 2024</h2>
+        <h2>Available Time Slots</h2>
         <p>All times shown are CDT</p>
         <div class="time-section">
           <div data-time="09:00" class="time-slot">09:00 am</div>
@@ -80,9 +80,25 @@
             <button id= "book-btn" class="book-btn">BOOK</button>
             <button id= "cancel-btn" class="cancel-btn">CANCEL</button>
         </div>
+
+        
       </div>
     </div>
   </div>
+
+
+  <div class="dialog-overlay" id="confirmationDialog" style="display: none;">
+    <div class="dialog-box">
+      <img src="confetti.gif" alt="Confetti" class="confetti-gif" />
+      <button class="close-btn" onclick="closeDialog()">×</button>
+      <div class="confetti"></div>
+      <h2>Thank you!</h2>
+      <p>Your booking has been confirmed. 😊</p>
+    </div>
+  </div>
+
+
+  
   <script src="script.js"></script>
 </body>
 </html>
