@@ -5,7 +5,7 @@ session_start(); // Start the session
 $servername = "localhost";
 $username = "root"; // Replace with your database username
 $password = ""; // Replace with your database password
-$dbname = "mrc_db"; // Replace with your database name
+$dbname = "esmile_db"; // Replace with your database name
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Prepare SQL query to insert user data
-    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, username, password, email, region, province, city_municipality, barangay, dob, mobile_no, sex, telephone_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO patient_details (first_name, last_name, username, password, email, region, province, city_municipality, barangay, dob, mobile_no, sex, telephone_no) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     if ($stmt === false) {
         die('MySQL prepare error: ' . $conn->error); // Check for errors in preparation
     }
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Execute query and check for success
     if ($stmt->execute()) {
         $_SESSION['success'] = "Account created successfully!";
-        header('Location: login.html');
+        header('Location: index.html');
         exit();
     } else {
         $_SESSION['error'] = "Error creating account. " . $stmt->error; // Display detailed error

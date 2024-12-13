@@ -3,7 +3,7 @@
 $host = "localhost"; // Server hostname
 $username = "root";  // Default XAMPP username
 $password = "";      // Default XAMPP password (leave blank)
-$database = "mrc_db"; // Your database name
+$database = "esmile_db"; // Your database name
 
 // Create a connection
 $conn = new mysqli($host, $username, $password, $database);
